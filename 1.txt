@@ -1,0 +1,69 @@
+python -m src.run.2_train_compatibility \
+--wandb_key 3ba2eadd20f6211ecb6dea157276cddaff1cbfa9
+
+python -m src.run.3_train_complementary \
+--wandb_key 3ba2eadd20f6211ecb6dea157276cddaff1cbfa9
+--checkpoint checkpoints/compatibillity_clip_best.pth
+
+python -m src.run.4 \
+--wandb_key 3ba2eadd20f6211ecb6dea157276cddaff1cbfa9
+--checkpoint checkpoints/compatibillity_clip_best.pth
+
+轮次过多
+size翻倍  256(8)
+
+Compatibility Prediction任务测试 
+python -m src.run.2_test_compatibility --checkpoint checkpoints/compatibillity_clip_best.pth
+
+{'acc': 0.8768499493598938, 'precision': 0.8983194165521615, 'recall': 0.8499, 'f1': 0.8734391860644366, 'auc': 0.9501467700000001}
+
+python -m src.run.2_test_compatibility --checkpoint checkpoints/epoch_101.pth
+
+{'acc': 0.8758499622344971, 'precision': 0.8841083290751149, 'recall': 0.8651, 'f1': 0.874500884508466, 'auc': 0.9473523149999998}
+
+
+修改load
+
+    elif model_type == 'clip':
+        valid_keys = OutfitCLIPTransformerConfig.__annotations__.keys()
+        filtered_cfg = {k: v for k, v in cfg.items() if k in valid_keys}
+        model = OutfitCLIPTransformer(OutfitCLIPTransformerConfig(**filtered_cfg))
+
+
+
+ Complementary Item Retrieval 任务  test
+python -m src.run.3_test_complementary --checkpoint checkpoints/complementary_clip_best.pth
+
+python -m src.run.3_test_complementary --checkpoint checkpoints/best_model.pth
+
+
+python -m src.demo.1_generate_rec_embeddings --checkpoint checkpoints/compatibillity_clip_best.pth
+
+python -m src.demo.3_run --checkpoint checkpoints/compatibillity_clip_best.pth
+
+
+一套服装：
+Item ID: 132621870
+  Category: bags
+  Description: judith leiber couture coffered rectangle
+  Image URL: 132621870
+Item ID: 153967122
+  Category: shoes
+  Description: gianvito rossi portofino suede sandals
+  Image URL: 153967122
+Item ID: 171169800
+  Category: jewellery
+  Description: preowned libertine perfume bottle style
+  Image URL: 171169800
+Item ID: 162799044
+  Category: jewellery
+  Description: oscar de la renta silver-plated
+  Image URL: 162799044
+Item ID: 172538912
+  Category: jewellery
+  Description: 18-karat white gold diamond ring
+  Image URL: 172538912
+Item ID: 172312529
+  Category: all-body
+  Description: lela rose embroidered tulle dress
+  Image URL: 172312529
