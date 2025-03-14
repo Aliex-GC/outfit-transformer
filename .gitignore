@@ -4,6 +4,7 @@ results/
 stores/
 datasets/
 logs/
+models/
 *.db
 *.faiss
 *.zip
